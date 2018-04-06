@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+<head>
+    <title>Code Player</title>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+
+  <script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+  integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+  crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+  <style>
+
+  body{
+    padding: 0px;
+    margin: 0px;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 300;
+  }
+
+  #menuBar{
+    background:  #f2f2f2;
+    height: 40px;
+    width: 100%;
+    border-bottom: 1px solid grey;
+  }
+
+  #logo{
+    padding: 5px 0 0 20px;
+    font-weight: bold;
+    font-size: 120%;
+    float: left;
+  }
+
+  #buttonDiv{
+    float: right;
+    padding: 5px 10px 0 0;
+  }
+
+  #runButton{
+    font-size: 120%;
+  }
+
+  #toggles{
+    margin:0 auto;
+    width: 160.5px;
+    list-style: none;
+    border: 1px solid grey;
+    border-radius: 3px;
+    height: 27px;
+    padding: 0;
+    position: relative;
+    top: 5px;
+  }
+
+  #toggles li{
+    float: left;
+    border-right: 1px solid grey;
+    padding: 5px 7px;
+  }
+
+  .clear{
+    clear: both;
+  }
+
+  .codeContainer{
+    width: 50%;
+    height: 100%;
+    float: left;
+    position: relative;
+  }
+
+  .codeContainer textarea{
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-right: 1px solid grey;
+    font-family: monotype;
+    font-size: 120%;
+    padding: 5px;
+    box-sizing: border-box;
+  }
+
+  .codeLabel{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+
+  #CSSContainer, #JSContainer{
+    display: none;
+  }
+
+  iframe{
+    height: 100%;
+    border: none;
+    position: relative;
+    left: 20px;
+
+  }
+
+  .selected{
+    background: grey;
+  }
+  </style>
+
+</head>
+
+
+<body>
+
+  <div id="wrapper">
+
+  <div id="menuBar">
+    <div id="logo"> CodePlayer</div>
+
+    <div id="buttonDiv">
+      <button id="runButton" type="button" name="button">Run</button>
+    </div>
+
+    <ul id="toggles">
+      <li class="toggle selected">HTML</li>
+      <li class="toggle">CSS</li>
+      <li class="toggle selected" style="border: none">Result</li>
+    </ul>
+
+  </div>
+
+
+  <div class="clear"></div>
+
+  <div class="codeContainer" id="HTMLContainer">
+    <div class="codeLabel">HTML</div>
+    <textarea id="htmlCode"><div id="test"></div></textarea>
+  </div>
+
+  <div class="codeContainer" id="CSSContainer">
+    <div class="codeLabel">CSS</div>
+    <textarea id="cssCode">html {background: blue}</textarea>
+  </div>
+
+  <div class="codeContainer" id="ResultContainer">
+    <div class="codeLabel">Result</div>
+    <iframe id="resultFrame"></iframe>
+  </div>
+
+</div>
+
+  <script >
+    var windowHeight = $(window).height();
+    var menuBarHeight = $("#menuBar").height();
+    var codeContainerHeight = windowHeight - menuBarHeight;
+    $(".codeContainer").height(codeContainerHeight);
+
+    $(".toggle").click(function(){
+      $(this).toggleClass("selected");
+
+      var activeDiv = $(this).html();
+      $("#"+activeDiv+"Container").toggle();
+
+      var showingDivs = $(".codeContainer").filter(function(){
+        return ($(this).css("display")!=="none");
+      }).length;
+
+      var width = 100/showingDivs;
+      $(".codeContainer").width(width+"%");
+    });
+
+    $("#runButton").click(function(){
+      $("iframe").contents().find("html").html('<style>'+$("#cssCode").val() + '</style>' + $("#htmlCode").val());
+
+    });
+
+  </script>
+
+</body>
+</html>
